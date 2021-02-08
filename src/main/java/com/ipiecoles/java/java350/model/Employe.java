@@ -48,6 +48,15 @@ public class Employe {
      * @return
      */
     public Integer getNombreAnneeAnciennete() {
+
+        if (dateEmbauche == null) {
+            return null;
+        }
+
+        if (dateEmbauche.isAfter(LocalDate.now())) {
+            return 0;
+        }
+
         return LocalDate.now().getYear() - dateEmbauche.getYear();
     }
 
