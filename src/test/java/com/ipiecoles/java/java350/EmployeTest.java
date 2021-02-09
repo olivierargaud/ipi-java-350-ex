@@ -117,20 +117,22 @@ public class EmployeTest {
 
 
 
-    @ParameterizedTest(name = "matricule {0}, date d'embauche {1}, performance {2}, temp partiel {3} ,valeur prime : {4}")
+    @ParameterizedTest(name = "matricule {0}, date d embauche {1}, performance {2}, temps partiel {3} ,valeur prime : {4}")
     @CsvSource
     ({
+            "'M12345',0,1,1.0,1700.0",
             "'M12345',4,1,1.0,2100.0",
-            "'M12345',9,1,1.0,2600.0",
-            "'M12345',4,1,0.8,1680.0",
+            "'M12345',0,1,0.5,850.0",
+            "'T12345',0,1,1.0,1000.0",
             "'T12345',4,1,1.0,1400.0",
-            "'T12345',9,1,1.0,1900.0",
-            "'T12345',4,1,0.8,1120.0",
+            "'T12345',4,1,0.5,700.0",
+            "'T12345',0,2,1.0,2300.0",
             "'T12345',4,2,1.0,2700.0",
-            "'T12345',9,2,1.0,3200.0",
-            "'T12345',4,2,0.8,2160.0",
+            "'T12345',0,2,0.5,1150.0",
+            "'T12345',4,0,1.0,1400.0"
+
     })
-    public void TestGetPrimeAnnnuelle(String matricule,Integer anciennete,Integer performance,Double tempsPartiel,Double prime)
+    public void TestGetPrimeAnnuelle(String matricule,Integer anciennete,Integer performance,Double tempsPartiel,Double prime)
     {
         //Given
         LocalDate localDate = LocalDate.now().minusYears(anciennete);
