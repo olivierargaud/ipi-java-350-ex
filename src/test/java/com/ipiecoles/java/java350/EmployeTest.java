@@ -129,8 +129,9 @@ public class EmployeTest {
             "'T12345',0,2,1.0,2300.0",
             "'T12345',4,2,1.0,2700.0",
             "'T12345',0,2,0.5,1150.0",
-            "'T12345',4,0,1.0,1400.0"
-
+            "'T12345',4,0,1.0,1400.0",
+            "'T12345',0,1,0.0,0.0",
+            "null,0,1,1.0,1000.0"
     })
     public void TestGetPrimeAnnuelle(String matricule,Integer anciennete,Integer performance,Double tempsPartiel,Double prime)
     {
@@ -147,6 +148,17 @@ public class EmployeTest {
     }
 
 
+    @Test
+    public void TestGetPrimeAnnuelleAvecPerformanceNull() {
+        //Given
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 1500d, null, 1.0);
 
+        //When
+        Double primeAnnuelle = employe.getPrimeAnnuelle();
+
+        //Then
+        Assertions.assertThat(primeAnnuelle).isEqualTo(1000.0);
+    }
 
 }
