@@ -68,6 +68,11 @@ public class Employe {
         return getNbRtt(LocalDate.now());
     }
 
+    /**
+     *
+     * @param d
+     * @return
+     */
     public Integer getNbRtt(LocalDate d) {
         int i1 = d.isLeapYear() ? 365 : 366;
         int var = 104;
@@ -238,5 +243,19 @@ public class Employe {
     @Override
     public int hashCode() {
         return Objects.hash(id, nom, prenom, matricule, dateEmbauche, salaire, performance);
+    }
+
+    @Override
+    public String toString() {
+        return "Employe{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", matricule='" + matricule + '\'' +
+                ", dateEmbauche=" + dateEmbauche +
+                ", salaire=" + salaire +
+                ", performance=" + performance +
+                ", tempsPartiel=" + tempsPartiel +
+                '}';
     }
 }
