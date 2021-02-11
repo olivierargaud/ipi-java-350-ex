@@ -6,60 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-
 import java.time.LocalDate;
 
-import java.util.ArrayList;
 
 public class EmployeTest {
 
-//      pas bien test unitaire egale un test une fonction
-//    @Test
-//    public void TestGetNombreAnneeAncienneteEmploye()
-//    {
-//        //Given
-////        ArrayList<LocalDate> localDates = new ArrayList<>();
-////        localDates.add( LocalDate.of(2004,9,30));
-////        localDates.add( LocalDate.now().plusYears(1));
-////        localDates.add( null);
-////        localDates.add( LocalDate.of(1855,9,30));
-//
-//        LocalDate dateEmbauche1 = LocalDate.of(2004,9,30);
-//        LocalDate dateEmbauche2 = LocalDate.now().plusYears(1);
-//        LocalDate dateEmbauche3 = null;
-//        LocalDate dateEmbauche4 = LocalDate.of(1855,9,30);
-//
-////        for (LocalDate localDate : localDates)
-////        {
-////            Employe employe1 = new Employe();
-////            employe1.setDateEmbauche(localDate);
-////
-////        }
-//
-//        Employe employe1 = new Employe();
-//        Employe employe2 = new Employe();
-//        Employe employe3 = new Employe();
-//        Employe employe4 = new Employe();
-//
-//
-//        employe1.setDateEmbauche(dateEmbauche1);
-//        employe2.setDateEmbauche(dateEmbauche2);
-//        employe3.setDateEmbauche(dateEmbauche3);
-//        employe4.setDateEmbauche(dateEmbauche4);
-//
-//        //When
-//        Integer anciennete1 = employe1.getNombreAnneeAnciennete();
-//        Integer anciennete2 = employe2.getNombreAnneeAnciennete();
-//        Integer anciennete3 = employe3.getNombreAnneeAnciennete();
-//        Integer anciennete4 = employe3.getNombreAnneeAnciennete();
-//
-//        //Then
-//        Assertions.assertThat(anciennete1).isNotNegative();
-//        Assertions.assertThat(anciennete2).isNotNegative();
-//        Assertions.assertThat(anciennete3).isNotNegative();
-//        Assertions.assertThat(anciennete4).isNotNegative();
-//
-//    }
+
 
     @Test
     public void TestGetNombreAnneeAncienneteDateEmbaucheNull() {
@@ -171,5 +123,55 @@ public class EmployeTest {
         //Then
         Assertions.assertThat(primeAnnuelle).isEqualTo(1000.0);
     }
+
+
+    @ParameterizedTest(name = "annee {0}, nombre de RTT {1}")
+    @CsvSource
+            ({
+                    "2019,8",
+                    "2021,10",
+                    "2022,10",
+                    "2032,11",
+            })
+    public void TestGetRTT(Integer annee, Integer nbRTT) {
+        //Given
+        LocalDate localDate = LocalDate.of(annee, 1, 1);
+        Employe employe = new Employe();
+
+        //When
+        Integer nombreDeRTT = employe.getNbRtt(localDate);
+
+        //Then
+        Assertions.assertThat(nombreDeRTT).isEqualTo(nbRTT);
+
+    }
+
+
+
+    @ParameterizedTest(name = "poucentage {0},salaire aprés augmentation")
+    @CsvSource
+            ({
+                    "0.1,2200",
+                    "0.5,3000",
+                    "1.0,4000"
+            })
+    public void TestAugmenterSalaire(Double pourcentage,Double salaireAugmente) {
+        //Given
+
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 2000d, 1, 1.0);
+
+        //When
+        employe.augmenterSalaire(pourcentage);
+
+        //Then
+        Assertions.assertThat(employe.getSalaire()).isEqualTo(salaireAugmente);
+
+    }
+
+
+
+
+
 
 }

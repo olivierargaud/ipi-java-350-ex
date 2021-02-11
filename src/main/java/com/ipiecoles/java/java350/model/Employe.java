@@ -83,7 +83,11 @@ public class Employe {
      * au prorata du temps d'activité
      */
     public Integer getNbRtt(LocalDate dateReference) {
+
         int nbJoursAnnee = dateReference.isLeapYear() ? 366 : 365;
+
+        //décompte du nombre de samedi dimanche de l'année en fonction du premier jour de l'année
+        //seuls les jeudis, vendredis et samedis ont un impact sur ce total
         int nbSamediDimanche = 104;
         switch (LocalDate.of(dateReference.getYear(), 1, 1).getDayOfWeek()) {
             case THURSDAY:
@@ -103,8 +107,12 @@ public class Employe {
                 nbSamediDimanche = nbSamediDimanche + 1;
                 break;
         }
+
+        // décompte du nombre de jours fériés nbJoursFeriesSemaine
+        // tombant dans la semaine dans la liste des jours fériés à une date donnée
         int nbJoursFeriesSemaine = (int) Entreprise.joursFeries(dateReference).stream().filter(localDate ->
                 localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
+
         return (int) Math.ceil((
                 nbJoursAnnee
                         - Entreprise.NB_JOURS_MAX_FORFAIT
@@ -150,7 +158,7 @@ public class Employe {
     }
 
     //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    public void augmenterSalaire(double pourcentage){}
 
     public Long getId() {
         return id;

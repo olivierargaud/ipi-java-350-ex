@@ -24,14 +24,6 @@ class EmployeServiceTest {
     private EmployeRepository employeRepository;
 
 
-    // pas necessaire sous junit 5 mais necesssaire sous junit 4 pour l'etancheité
-//    @BeforeEach
-//    public void setup(){
-//        MockitoAnnotations.initMocks(this.getClass());
-//    }
-
-
-
     @Test
     public void testEmbauchePremierEmploye() throws EmployeException {
         //Given
@@ -42,11 +34,10 @@ class EmployeServiceTest {
         Double tempsPartiel = 1.0;
         // Simuler qu'aucun employé n'est present
         Mockito.when(employeRepository.findLastMatricule()).thenReturn(null);
-//        Mockito.when(employeRepository.findLastMatricule()).thenReturn("00000");
         // la on connait le matricule car c'est le premier employe et que c'est un technicien donc T00001
         Mockito.when(employeRepository.findByMatricule("T00001")).thenReturn(null);
-        // si on sais pas quel param
-//        Mockito.when(employeRepository.findByMatricule(Mockito.anyString())).thenReturn(null);
+
+        Mockito.when(employeRepository.save(Mockito.any(Employe.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         //When
         employeService.embaucheEmploye(nom,prenom,poste,niveauEtude,tempsPartiel);
@@ -54,17 +45,8 @@ class EmployeServiceTest {
         //Then
         ArgumentCaptor<Employe> employeCaptor = ArgumentCaptor.forClass(Employe.class);
         Mockito.verify(employeRepository).save(employeCaptor.capture());
-        // times si on veut faire plusieur capture
-//        Mockito.verify(employeRepository, Mockito.times(1)).save(employeCaptor.capture());
 
         Employe employe = employeCaptor.getValue();
-
-//        Assertions.assertThat(employeCaptor.getValue().getNom()).isEqualTo(nom);
-//        Assertions.assertThat(employeCaptor.getValue().getPrenom()).isEqualTo(prenom);
-//        Assertions.assertThat(employeCaptor.getValue().getSalaire()).isEqualTo(1825.46);
-//        Assertions.assertThat(employeCaptor.getValue().getTempsPartiel()).isEqualTo(tempsPartiel);
-//        Assertions.assertThat(employeCaptor.getValue().getDateEmbauche()).isEqualTo(LocalDate.now());
-//        Assertions.assertThat(employeCaptor.getValue().getMatricule()).isEqualTo("T00001");
 
         Assertions.assertThat(employe.getNom()).isEqualTo(nom);
         Assertions.assertThat(employe.getPrenom()).isEqualTo(prenom);
@@ -85,17 +67,15 @@ class EmployeServiceTest {
         Double tempsPartiel = 0.5;
         // Simuler qu'aucun employé n'est present
         Mockito.when(employeRepository.findLastMatricule()).thenReturn(null);
-//        Mockito.when(employeRepository.findLastMatricule()).thenReturn("00000");
         Mockito.when(employeRepository.findByMatricule("T00001")).thenReturn(null);
-        // si on sais pas quel param
-//        Mockito.when(employeRepository.findByMatricule(Mockito.anyString())).thenReturn(null);
+        Mockito.when(employeRepository.save(Mockito.any(Employe.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         //When
         employeService.embaucheEmploye(nom,prenom,poste,niveauEtude,tempsPartiel);
 
         //Then
         ArgumentCaptor<Employe> employeCaptor = ArgumentCaptor.forClass(Employe.class);
-        Mockito.verify(employeRepository, Mockito.times(1)).save(employeCaptor.capture());
+        Mockito.verify(employeRepository).save(employeCaptor.capture());
 
         Assertions.assertThat(employeCaptor.getValue().getNom()).isEqualTo(nom);
         Assertions.assertThat(employeCaptor.getValue().getPrenom()).isEqualTo(prenom);
@@ -115,10 +95,8 @@ class EmployeServiceTest {
         NiveauEtude niveauEtude = NiveauEtude.BTS_IUT;
         Double tempsPartiel = 1.0;
 
-
         // Simuler que 99999 employe sont deja present
         Mockito.when(employeRepository.findLastMatricule()).thenReturn("99999");
-//        Mockito.when(employeRepository.findLastMatricule()).thenReturn("00001");
 
         //When
         try {
@@ -144,8 +122,6 @@ class EmployeServiceTest {
         Double tempsPartiel = 1.0;
         Employe employeExistant = new Employe("Doe","Jane","T00001",LocalDate.now(),1500d,1,1.0);
 
-        // Simuler qu'aucun employé n'est present
-        Mockito.when(employeRepository.findLastMatricule()).thenReturn(null);
         // Simuler qu'un employe avec ce matricule existe deja
         Mockito.when(employeRepository.findByMatricule("T00001")).thenReturn(employeExistant);
 
