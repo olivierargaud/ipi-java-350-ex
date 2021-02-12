@@ -25,7 +25,7 @@ class EmployeServiceTest {
 
 
     @Test
-    public void testEmbauchePremierEmploye() throws EmployeException {
+    void testEmbauchePremierEmploye() throws EmployeException {
         //Given
         String nom = "Doe2";
         String prenom = "John";
@@ -58,7 +58,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheTempsPartiel() throws EmployeException {
+    void testEmbaucheTempsPartiel() throws EmployeException {
         //Given
         String nom = "Doe2";
         String prenom = "John";
@@ -87,7 +87,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheLimiteMatricule() {
+    void testEmbaucheLimiteMatricule() {
         //Given
         String nom = "Doe2";
         String prenom = "John";
@@ -113,7 +113,7 @@ class EmployeServiceTest {
 
 
     @Test
-    public void testEmbaucheMatriculeDejaPresent() throws EmployeException {
+    void testEmbaucheMatriculeDejaPresent() throws EmployeException {
         //Given
         String nom = "Doe2";
         String prenom = "John";

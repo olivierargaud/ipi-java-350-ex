@@ -9,12 +9,12 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.time.LocalDate;
 
 
-public class EmployeTest {
+class EmployeTest {
 
 
 
     @Test
-    public void TestGetNombreAnneeAncienneteDateEmbaucheNull() {
+    void TestGetNombreAnneeAncienneteDateEmbaucheNull() {
         //Given
         Employe employe = new Employe("Doe", "John", "T12345",
                 null, 1500d, 1, 1.0);
@@ -27,7 +27,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void TestGetNombreAnneeAncienneteDateEmbaucheInfNow() {
+    void TestGetNombreAnneeAncienneteDateEmbaucheInfNow() {
         //Given
         Employe employe = new Employe("Doe", "John", "T12345",
                 LocalDate.now().minusYears(5), 1500d, 1, 1.0);
@@ -41,7 +41,7 @@ public class EmployeTest {
 
 
     @Test
-    public void TestGetNombreAnneeAncienneteDateEmbaucheSupNow() {
+    void TestGetNombreAnneeAncienneteDateEmbaucheSupNow() {
         //Given
         Employe employe = new Employe("Doe", "John", "T12345",
                 LocalDate.now().plusYears(7), 1500d, 1, 1.0);
@@ -54,7 +54,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void TestGetNombreAnneeAncienneteDateEmbaucheNow() {
+    void TestGetNombreAnneeAncienneteDateEmbaucheNow() {
         //Given
         Employe employe = new Employe("Doe", "John", "T12345",
                 LocalDate.now(), 1500d, 1, 1.0);
@@ -84,7 +84,7 @@ public class EmployeTest {
             "'T12345',4,0,1.0,1400.0",
             "'T12345',0,1,0.0,0.0"
     })
-    public void TestGetPrimeAnnuelle(String matricule,Integer anciennete,Integer performance,Double tempsPartiel,Double prime)
+    void TestGetPrimeAnnuelle(String matricule,Integer anciennete,Integer performance,Double tempsPartiel,Double prime)
     {
         //Given
         LocalDate localDate = LocalDate.now().minusYears(anciennete);
@@ -99,7 +99,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void TestGetPrimeAnnuelleAvecMatriculeNull() {
+    void TestGetPrimeAnnuelleAvecMatriculeNull() {
         //Given
         Employe employe = new Employe("Doe", "John", null,
                 LocalDate.now(), 1500d, 1, 1.0);
@@ -112,7 +112,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void TestGetPrimeAnnuelleAvecPerformanceNull() {
+    void TestGetPrimeAnnuelleAvecPerformanceNull() {
         //Given
         Employe employe = new Employe("Doe", "John", "T12345",
                 LocalDate.now(), 1500d, null, 1.0);
@@ -143,7 +143,7 @@ public class EmployeTest {
                     "2028,9",//samedi
 
             })
-    public void TestGetRTT(Integer annee, Integer nbRTT) {
+    void TestGetRTT(Integer annee, Integer nbRTT) {
         //Given
         LocalDate localDate = LocalDate.of(annee, 1, 1);
         Employe employe = new Employe();
@@ -165,7 +165,7 @@ public class EmployeTest {
                     "-0.5,2000",
                     ",2000"
             })
-    public void TestAugmenterSalaire(Double pourcentage,Double salaireAugmente) {
+    void TestAugmenterSalaire(Double pourcentage,Double salaireAugmente) {
         //Given
 
         Employe employe = new Employe("Doe", "John", "T12345",

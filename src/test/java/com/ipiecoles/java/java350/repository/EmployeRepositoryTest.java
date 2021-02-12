@@ -13,39 +13,19 @@ import java.time.LocalDate;
 @SpringBootTest
 class EmployeRepositoryTest {
 
-
     @Autowired
     EmployeRepository employeRepository;
 
 
-//    @BeforeAll // Junit 5
-//    public void setUp(){//Nom setUp arbitraire
-//        //Appelé une seule fois avant l'exécution des tests
-//    }
-//    @BeforeEach // Junit 5
-//    public void before(){//Nom before arbitraire
-//        //Appelé avant chaque test
-//        employeRepository.deleteAll();
-//    }
-//    @AfterEach //Junit 5
-//    public void after(){//Nom after arbitraire
-//        //Appelé après chaque test
-//        employeRepository.deleteAll();
-//    }
-//    @AfterAll // Junit 5
-//    public void tearDown(){//Nom tearDown arbitraire
-//        //Appelé une fois que tous les tests sont passés
-//    }
-
     @BeforeEach // Junit 5
     @AfterEach //Junit 5
-    public void purgeBDD()
+    void purgeBDD()
     {
         employeRepository.deleteAll();
     }
 
     @Test
-    public void testFindLastMatricule0Employe()
+    void testFindLastMatricule0Employe()
     {
         //given
 
@@ -57,7 +37,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    public void testFindLastMatricule1Employe()
+    void testFindLastMatricule1Employe()
     {
         //given
         employeRepository.save(new Employe("Doe", "John", "T12345",
@@ -71,7 +51,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    public void testFindLastMatriculeNEmploye()
+    void testFindLastMatriculeNEmploye()
     {
         //given
         employeRepository.save(new Employe("Doe", "John", "T12345",
@@ -101,7 +81,7 @@ class EmployeRepositoryTest {
 
 
     @Test
-    public void testAvgPerformanceWhereMatriculeStartsWith()
+    void testAvgPerformanceWhereMatriculeStartsWith()
     {
 
 
