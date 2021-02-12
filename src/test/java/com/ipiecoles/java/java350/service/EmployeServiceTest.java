@@ -104,7 +104,7 @@ class EmployeServiceTest {
             Assertions.fail("embaucheEmploye aurait du lancer une execption");
         } catch (EmployeException e) {
             //Then
-            Assertions.assertThat(e.getMessage().equals("Limite des 100000 matricules atteinte !"));
+            Assertions.assertThat(e.getMessage()).isEqualTo("Limite des 100000 matricules atteinte !");
             // pour verifier que l'on a jamais appelé la methode save
             Mockito.verify(employeRepository,Mockito.never()).save(Mockito.any(Employe.class));
         }
@@ -133,7 +133,7 @@ class EmployeServiceTest {
         {
             //Then
             Assertions.assertThat(e).isInstanceOf(EntityExistsException.class);
-            Assertions.assertThat(e.getMessage().equals("L'employé de matricule T00001 existe déjà en BDD"));
+            Assertions.assertThat(e.getMessage()).isEqualTo("L'employé de matricule T00001 existe déjà en BDD");
         }
 
 

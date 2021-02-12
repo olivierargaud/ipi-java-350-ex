@@ -106,6 +106,8 @@ public class Employe {
             case SATURDAY:
                 nbSamediDimanche = nbSamediDimanche + 1;
                 break;
+            default:
+                break;
         }
 
         // décompte du nombre de jours fériés nbJoursFeriesSemaine
@@ -158,8 +160,10 @@ public class Employe {
     }
 
     //Augmenter salaire
-    public void augmenterSalaire(double pourcentage){
-        setSalaire(getSalaire()*(1+pourcentage));
+    public void augmenterSalaire(Double pourcentage) {
+        if (pourcentage!=null && pourcentage >= 0) {
+            setSalaire(getSalaire() * (1 + pourcentage));
+        }
     }
 
     public Long getId() {

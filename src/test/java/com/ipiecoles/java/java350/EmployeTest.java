@@ -128,10 +128,20 @@ public class EmployeTest {
     @ParameterizedTest(name = "annee {0}, nombre de RTT {1}")
     @CsvSource
             ({
-                    "2019,8",
-                    "2021,10",
-                    "2022,10",
-                    "2032,11",
+                    // non bissextile
+                    "2019,8",//mardi
+
+                    "2026,9",//jeudi
+                    "2021,10",//vendredi
+                    "2022,10",//samedi
+
+                    // bissextile
+                    "2036,9",//mardi
+
+                    "2032,11",//jeudi
+                    "2044,9",//vendredi
+                    "2028,9",//samedi
+
             })
     public void TestGetRTT(Integer annee, Integer nbRTT) {
         //Given
@@ -152,8 +162,8 @@ public class EmployeTest {
     @CsvSource
             ({
                     "0.1,2200",
-                    "0.5,3000",
-                    "1.0,4000"
+                    "-0.5,2000",
+                    ",2000"
             })
     public void TestAugmenterSalaire(Double pourcentage,Double salaireAugmente) {
         //Given
