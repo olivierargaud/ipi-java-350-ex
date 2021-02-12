@@ -4,6 +4,8 @@ package com.ipiecoles.java.java350.repository;
 import com.ipiecoles.java.java350.model.Employe;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -79,14 +81,40 @@ class EmployeRepositoryTest {
     }
 
 
-
-    @Test
-    void testAvgPerformanceWhereMatriculeStartsWith()
+    @ParameterizedTest(name = "Initiale poste {0}, performance moyenne {1}")
+    @CsvSource
+            ({
+                    "'T',2",
+                    "'M',3",
+                    "'C',1",
+                    "'Z',"
+            })
+    void testAvgPerformanceWhereMatriculeStartsWith(String metier, Double perfMoyenne)
     {
 
+        //given
+        employeRepository.save(new Employe("Doe", "John", "T12345",
+                LocalDate.now().minusYears(5), 1500d, 1, 1.0));
+        employeRepository.save(new Employe("Doe2", "John", "T23456",
+                LocalDate.now().minusYears(5), 1500d, 2, 1.0));
+        employeRepository.save(new Employe("Doe3", "John", "T34567",
+                LocalDate.now().minusYears(5), 1500d, 3, 1.0));
+        employeRepository.save(new Employe("Doe4", "John", "T12389",
+                LocalDate.now().minusYears(5), 1500d, 1, 1.0));
+        employeRepository.save(new Employe("Doe5", "John", "TBCDEF",
+                LocalDate.now().minusYears(5), 1500d, 2, 1.0));
+        employeRepository.save(new Employe("Doe5", "John", "TABCDE",
+                LocalDate.now().minusYears(5), 1500d, 3, 1.0));
+        employeRepository.save(new Employe("Doe6", "John", "C40325",
+                LocalDate.now().minusYears(5), 1500d, 1, 1.0));
+        employeRepository.save(new Employe("Doe7", "John", "M06432",
+                LocalDate.now().minusYears(5), 1500d, 3, 1.0));
 
+        //when
+        Double performanceMoyenne = employeRepository.avgPerformanceWhereMatriculeStartsWith(metier);
 
-
+        //then
+        Assertions.assertThat(performanceMoyenne).isEqualTo(perfMoyenne);
 
     }
 

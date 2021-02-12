@@ -85,7 +85,7 @@ public class EmployeService {
      * Cette performance lui est affectée et sauvegardée en BDD
      *
      * 1 : Si le chiffre d'affaire est inférieur de plus de 20% à l'objectif fixé, le commercial retombe à la performance de base
-     * 2 : Si le chiffre d'affaire est inférieur entre 20% et 5% par rapport à l'ojectif fixé, il perd 2 de performance (dans la limite de la performance de base)
+     * 2 : Si le chiffre d'affaire est inférieur entre 20% et 5% par rapport à l'objectif fixé, il perd 2 de performance (dans la limite de la performance de base)
      * 3 : Si le chiffre d'affaire est entre -5% et +5% de l'objectif fixé, la performance reste la même.
      * 4 : Si le chiffre d'affaire est supérieur entre 5 et 20%, il gagne 1 de performance
      * 5 : Si le chiffre d'affaire est supérieur de plus de 20%, il gagne 4 de performance
@@ -99,21 +99,8 @@ public class EmployeService {
      * @throws EmployeException Si le matricule est null ou ne commence pas par un C
      */
     public void calculPerformanceCommercial(String matricule, Long caTraite, Long objectifCa) throws EmployeException {
-        //Vérification des paramètres d'entrée
-        if(caTraite == null || caTraite < 0){
-            throw new EmployeException("Le chiffre d'affaire traité ne peut être négatif ou null !");
-        }
-        if(objectifCa == null || objectifCa < 0){
-            throw new EmployeException("L'objectif de chiffre d'affaire ne peut être négatif ou null !");
-        }
-        if(matricule == null || !matricule.startsWith("C")){
-            throw new EmployeException("Le matricule ne peut être null et doit commencer par un C !");
-        }
-        //Recherche de l'employé dans la base
-        Employe employe = employeRepository.findByMatricule(matricule);
-        if(employe == null){
-            throw new EmployeException("Le matricule " + matricule + " n'existe pas !");
-        }
+
+        Employe employe = testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
 
         Integer performance = Entreprise.PERFORMANCE_BASE;
         //Cas 2
@@ -144,4 +131,46 @@ public class EmployeService {
         employe.setPerformance(performance);
         employeRepository.save(employe);
     }
+
+
+    /**
+     * Méthode testant la validité des différent paramètre nécessaire au calcul de la performance de l'employé
+     *
+     * @param matricule le matricule du commercial
+     * @param caTraite le chiffre d'affaire traité par le commercial pendant l'année
+     * @param objectifCa l'object de chiffre d'affaire qui lui a été fixé
+     * @return {@link Employe} Renvoie le commercial correspondant au matricule demandé
+     * @throws EmployeException Si le matricule est null ou ne commence pas par un C
+     * Si le chiffre d'affaire traité est null ou négatif
+     * Si l'objectif de chiffre d'affaire est null ou négatif
+     * Si l'on ne trouve pas l'employé de matricule demandé
+     */
+
+    public Employe testParametreCalculPerformanceValide(String matricule, Long caTraite, Long objectifCa) throws EmployeException {
+
+        //Vérification des paramètres d'entrée
+        if(caTraite == null || caTraite < 0){
+            throw new EmployeException("Le chiffre d'affaire traité ne peut être négatif ou null !");
+        }
+        if(objectifCa == null || objectifCa < 0){
+            throw new EmployeException("L'objectif de chiffre d'affaire ne peut être négatif ou null !");
+        }
+        if(matricule == null || !matricule.startsWith("C")){
+            throw new EmployeException("Le matricule ne peut être null et doit commencer par un C !");
+        }
+        //Recherche de l'employé dans la base
+        Employe employe = employeRepository.findByMatricule(matricule);
+        if(employe == null){
+            throw new EmployeException("Le matricule " + matricule + " n'existe pas !");
+        }
+        return employe;
+    }
+
+
+
+
+
+
+
+
 }

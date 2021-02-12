@@ -50,7 +50,7 @@ class EmployeTest {
         Integer anciennete = employe.getNombreAnneeAnciennete();
 
         //Then
-        Assertions.assertThat(anciennete).isEqualTo(0);
+        Assertions.assertThat(anciennete).isZero();
     }
 
     @Test
@@ -63,7 +63,7 @@ class EmployeTest {
         Integer anciennete = employe.getNombreAnneeAnciennete();
 
         //Then
-        Assertions.assertThat(anciennete).isEqualTo(0);
+        Assertions.assertThat(anciennete).isZero();
     }
 
 
@@ -125,28 +125,30 @@ class EmployeTest {
     }
 
 
-    @ParameterizedTest(name = "annee {0}, nombre de RTT {1}")
+    @ParameterizedTest(name = "annee {0}, temps partiel {1}, nombre de RTT {2}")
     @CsvSource
             ({
                     // non bissextile
-                    "2019,8",//mardi
+                    "2019,1.0,8",//mardi
+                    "2019,0.5,4",//mardi, temps partiel
 
-                    "2026,9",//jeudi
-                    "2021,10",//vendredi
-                    "2022,10",//samedi
+                    "2026,1.0,9",//jeudi
+                    "2021,1.0,10",//vendredi
+                    "2022,1.0,10",//samedi
 
                     // bissextile
-                    "2036,9",//mardi
+                    "2036,1.0,9",//mardi
 
-                    "2032,11",//jeudi
-                    "2044,9",//vendredi
-                    "2028,9",//samedi
+                    "2032,1.0,11",//jeudi
+                    "2044,1.0,9",//vendredi
+                    "2028,1.0,9",//samedi
 
             })
-    void TestGetRTT(Integer annee, Integer nbRTT) {
+    void TestGetRTT(Integer annee,Double tempsPartiel, Integer nbRTT) {
         //Given
         LocalDate localDate = LocalDate.of(annee, 1, 1);
-        Employe employe = new Employe();
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 2000d, 1, tempsPartiel);
 
         //When
         Integer nombreDeRTT = employe.getNbRtt(localDate);
@@ -158,7 +160,7 @@ class EmployeTest {
 
 
 
-    @ParameterizedTest(name = "poucentage {0},salaire aprés augmentation")
+    @ParameterizedTest(name = "poucentage {0},salaire aprés augmentation{1}")
     @CsvSource
             ({
                     "0.1,2200",

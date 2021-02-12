@@ -6,9 +6,10 @@ import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -113,7 +114,7 @@ class EmployeServiceTest {
 
 
     @Test
-    void testEmbaucheMatriculeDejaPresent() throws EmployeException {
+    void testEmbaucheMatriculeDejaPresent(){
         //Given
         String nom = "Doe2";
         String prenom = "John";
@@ -136,6 +137,164 @@ class EmployeServiceTest {
             Assertions.assertThat(e.getMessage()).isEqualTo("L'employé de matricule T00001 existe déjà en BDD");
         }
 
+    }
+
+    @ParameterizedTest(name = "matricule {0}, caTraite {1}, objectifCa {2}, performancePrecedente{3},performanceMoyenne{4}, performanceObtenue{5}")
+    @CsvSource
+            ({
+                    // performance en dessous de la moyenne
+                    "'C12345',799,1000,1,6,1", // caTraite < -20% objectif
+                    "'C12345',800,1000,0,6,1", // -20% objectif <= caTraite < -5% objectif
+                    "'C12345',800,1000,4,6,2", // -20% objectif <= caTraite < -5% objectif
+                    "'C12345',1000,1000,0,6,1", // -5% objectif <= caTraite <= +5% objectif
+                    "'C12345',1000,1000,4,6,4", // -5% objectif <= caTraite <= +5% objectif
+                    "'C12345',1200,1000,0,6,1", // +5% objectif < caTraite <= +20% objectif
+                    "'C12345',1200,1000,4,6,5", // +5% objectif < caTraite <= +20% objectif
+                    "'C12345',1201,1000,1,6,5", // +20% objectif < caTraite
+
+                    // performance au dessus de la moyenne
+                    "'C12345',1201,1000,4,6,9", // -5% objectif <= caTraite <= +5% objectif
+            })
+    void testCalculPerformanceCommercial(String matricule, Long caTraite, Long objectifCa, Integer performancePrecedente,Double performanceMoyenne ,Integer performanceObtenue) throws EmployeException {
+        //Given
+        Employe employe = new Employe("Doe","Jane",matricule,LocalDate.now(),1500d,performancePrecedente,1.0);
+
+        Mockito.when(employeRepository.findByMatricule(Mockito.anyString())).thenReturn(employe);
+        Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(performanceMoyenne);
+        //When
+        employeService.calculPerformanceCommercial(matricule,  caTraite,  objectifCa);
+
+        //Then
+        Assertions.assertThat(employe.getPerformance()).isEqualTo(performanceObtenue);
+
+
+    }
+
+
+    @Test
+    void testParametreCalculPerformanceValideCaTraiteNull(){
+        String matricule = "C12345";
+        Long caTraite = null;
+        Long objectifCa= 1000L;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le chiffre d'affaire traité ne peut être négatif ou null !");
+        }
+
+    }
+
+    @Test
+    void testParametreCalculPerformanceValideCaTraiteNegatif(){
+        String matricule = "C12345";
+        Long caTraite = -1000L;
+        Long objectifCa= 1000L;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le chiffre d'affaire traité ne peut être négatif ou null !");
+        }
+
+    }
+
+    @Test
+    void testParametreCalculPerformanceValideObjectifCaNull(){
+        String matricule = "C12345";
+        Long caTraite = 1000L;
+        Long objectifCa= null;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("L'objectif de chiffre d'affaire ne peut être négatif ou null !");
+        }
+
+    }
+
+    @Test
+    void testParametreCalculPerformanceValideObjectifCaNegatif(){
+        String matricule = "C12345";
+        Long caTraite = 1000L;
+        Long objectifCa= -1000L;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("L'objectif de chiffre d'affaire ne peut être négatif ou null !");
+        }
+
+    }
+
+    @Test
+    void testParametreCalculPerformanceValideMatriculeNull(){
+        String matricule = null;
+        Long caTraite = 1000L;
+        Long objectifCa= 1000L;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide(null,  caTraite,  objectifCa);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule ne peut être null et doit commencer par un C !");
+        }
+
+    }
+
+    @Test
+    void testParametreCalculPerformanceValideMatriculeNonCommerciaux(){
+        String matricule = "T12345";
+        Long caTraite = 1000L;
+        Long objectifCa= 1000L;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule ne peut être null et doit commencer par un C !");
+        }
+
+    }
+
+    @Test
+    void testParametreCalculPerformanceValideEmployeInexistant(){
+        String matricule = "C12345";
+        Long caTraite = 1000L;
+        Long objectifCa= 1000L;
+        //When
+        try{
+            employeService.testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
+            Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(null);
+            Assertions.fail("testParametreCalculPerformanceValide aurait du lancer une execption");
+        }catch(Exception e)
+        {
+            //Then
+            Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule " + matricule + " n'existe pas !");
+        }
 
     }
 
