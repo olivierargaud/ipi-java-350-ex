@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -57,6 +58,27 @@ class EmployeServiceIntegrationTest {
 
     }
 
+
+    @Test
+    void testCalculPerformanceCommercial() throws EmployeException {
+        //Given
+        Employe employe = employeRepository.save(new Employe("Doe", "John", "C12345",
+                LocalDate.now().minusYears(5), 1500d, 1, 1.0));
+        employeRepository.save(new Employe("Doe2", "John", "C23456",
+                LocalDate.now().minusYears(5), 1500d, 2, 1.0));
+        employeRepository.save(new Employe("Doe3", "John", "C34567",
+                LocalDate.now().minusYears(5), 1500d, 3, 1.0));
+
+        Long caTraite = 1000L;
+        Long objectifCa = 1000L;
+
+        //When
+        employeService.calculPerformanceCommercial( "C12345",  caTraite,  objectifCa);
+
+        //Then
+        Assertions.assertThat(employe.getPerformance()).isEqualTo(1);
+
+    }
 
 }
 
