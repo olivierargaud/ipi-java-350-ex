@@ -187,7 +187,7 @@ class EmployeTest {
             Assertions.fail("augmenterSalaire aurait du lancer une exception");
         }catch (Exception e)
         {
-            Assertions.assertThat(e).isInstanceOf(Exception.class);
+            Assertions.assertThat(e).isInstanceOf(IllegalArgumentException.class);
             Assertions.assertThat(e.getMessage()).isEqualTo("L'augmentation de salaire ne peut avoir un pourcentage négatif");
             Assertions.assertThat(employe.getSalaire()).isEqualTo(2000);
         }
@@ -207,7 +207,7 @@ class EmployeTest {
             Assertions.fail("augmenterSalaire aurait du lancer une exception");
         }catch (Exception e)
         {
-            Assertions.assertThat(e).isInstanceOf(Exception.class);
+            Assertions.assertThat(e).isInstanceOf(IllegalArgumentException.class);
             Assertions.assertThat(e.getMessage()).isEqualTo("L'augmentation de salaire ne peut avoir un pourcentage null");
             Assertions.assertThat(employe.getSalaire()).isEqualTo(2000);
         }
