@@ -13,7 +13,7 @@ public final class Entreprise {
     public static final Integer NB_JOURS_MAX_FORFAIT = 218;
     private static final double PRIME_BASE = 1000d;
 
-    public static final Map<NiveauEtude, Double> COEFF_SALAIRE_ETUDES = new EnumMap<>(NiveauEtude.class);
+    private static final Map<NiveauEtude, Double> COEFF_SALAIRE_ETUDES = new EnumMap<>(NiveauEtude.class);
     private static final Map<Integer, LocalDate> datePaque = new HashMap<>();
 
     private Entreprise() {
@@ -62,6 +62,10 @@ public final class Entreprise {
 
     public static Double primeAnnuelleBase() {
         return PRIME_BASE;
+    }
+
+    public static Map<NiveauEtude, Double> getCoeffSalaireEtudes() {
+        return COEFF_SALAIRE_ETUDES;
     }
 
     public static List<LocalDate> joursFeries(LocalDate now){
