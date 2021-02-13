@@ -159,17 +159,10 @@ class EmployeTest {
     }
 
 
-
-    @ParameterizedTest(name = "poucentage {0},salaire aprés augmentation{1}")
-    @CsvSource
-            ({
-                    "0.1,2200",
-                    "-0.5,2000",
-                    ",2000"
-            })
-    void TestAugmenterSalaire(Double pourcentage,Double salaireAugmente) {
+    @Test
+    void TestAugmenterSalaireCasNominal() throws Exception {
         //Given
-
+        Double pourcentage = 0.1;
         Employe employe = new Employe("Doe", "John", "T12345",
                 LocalDate.now(), 2000d, 1, 1.0);
 
@@ -177,13 +170,49 @@ class EmployeTest {
         employe.augmenterSalaire(pourcentage);
 
         //Then
-        Assertions.assertThat(employe.getSalaire()).isEqualTo(salaireAugmente);
+        Assertions.assertThat(employe.getSalaire()).isEqualTo(2200);
 
     }
 
+    @Test
+    void TestAugmenterSalairePourcentageNegatif() {
+        //Given
+        Double pourcentage = -0.5;
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 2000d, 1, 1.0);
 
+        //When
+        try {
+            employe.augmenterSalaire(pourcentage);
+            Assertions.fail("augmenterSalaire aurait du lancer une exception");
+        }catch (Exception e)
+        {
+            Assertions.assertThat(e).isInstanceOf(Exception.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("L'augmentation de salaire ne peut avoir un pourcentage négatif");
+            Assertions.assertThat(employe.getSalaire()).isEqualTo(2000);
+        }
 
+    }
 
+    @Test
+    void TestAugmenterSalairePourcentageNull() {
+        //Given
+        Double pourcentage = null;
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 2000d, 1, 1.0);
+
+        //When
+        try {
+            employe.augmenterSalaire(pourcentage);
+            Assertions.fail("augmenterSalaire aurait du lancer une exception");
+        }catch (Exception e)
+        {
+            Assertions.assertThat(e).isInstanceOf(Exception.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("L'augmentation de salaire ne peut avoir un pourcentage null");
+            Assertions.assertThat(employe.getSalaire()).isEqualTo(2000);
+        }
+
+    }
 
 
 }
