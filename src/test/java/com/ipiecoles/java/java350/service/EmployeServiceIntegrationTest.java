@@ -69,14 +69,15 @@ class EmployeServiceIntegrationTest {
         employeRepository.save(new Employe("Doe3", "John", "C34567",
                 LocalDate.now().minusYears(5), 1500d, 3, 1.0));
 
-        Long caTraite = 1000L;
+        Long caTraite = 1100L;
         Long objectifCa = 1000L;
 
         //When
-        employeService.calculPerformanceCommercial( "C12345",  caTraite,  objectifCa);
+        employeService.calculPerformanceCommercial( employe.getMatricule(),  caTraite,  objectifCa);
 
         //Then
-        Assertions.assertThat(employe.getPerformance()).isEqualTo(1);
+        Employe employe1 = employeRepository.findByMatricule(employe.getMatricule());
+        Assertions.assertThat(employe1.getPerformance()).isEqualTo(2);
 
     }
 
