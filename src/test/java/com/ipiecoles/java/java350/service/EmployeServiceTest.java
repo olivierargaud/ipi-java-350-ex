@@ -146,14 +146,12 @@ class EmployeServiceTest {
 
                     "'C12345',800,1000,10,0,1", // -20% objectif <= caTraite < -5% objectif
                     "'C12345',800,1000,10,4,2", // -20% objectif <= caTraite < -5% objectif
-                    "'C12345',801,1000,10,4,2", // -20% objectif <= caTraite < -5% objectif
 
                     "'C12345',950,1000,10,4,4", // -5% objectif <= caTraite <= +5% objectif
                     "'C12345',1049,1000,10,6,6", // -5% objectif <= caTraite <= +5% objectif
                     "'C12345',1050,1000,10,7,7", // -5% objectif <= caTraite <= +5% objectif
 
                     "'C12345',1051,1000,10,4,5", // +5% objectif < caTraite <= +20% objectif
-                    "'C12345',1199,1000,10,4,5", // +5% objectif < caTraite <= +20% objectif
                     "'C12345',1200,1000,10,4,5", // +5% objectif < caTraite <= +20% objectif
 
                     "'C12345',1201,1000,10,1,5", // +20% objectif < caTraite

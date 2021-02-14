@@ -101,25 +101,28 @@ public class EmployeService {
     public void calculPerformanceCommercial(String matricule, Long caTraite, Long objectifCa) throws EmployeException {
 
         Employe employe = testParametreCalculPerformanceValide( matricule,  caTraite,  objectifCa);
-
-        Integer performance = Entreprise.PERFORMANCE_BASE;
+        Integer performance;
+        //Cas 1
+        if(caTraite < objectifCa*0.8)
+        {
+            performance = Entreprise.PERFORMANCE_BASE;
+        }
         //Cas 2
-        if(objectifCa*0.8 <= caTraite && caTraite < objectifCa*0.95){
+        else if(caTraite < objectifCa*0.95){
             performance = Math.max(Entreprise.PERFORMANCE_BASE, employe.getPerformance() - 2);
         }
         //Cas 3
-        else if(objectifCa*0.95 <= caTraite && caTraite <= objectifCa*1.05){
+        else if(caTraite <= objectifCa*1.05){
             performance = Math.max(Entreprise.PERFORMANCE_BASE, employe.getPerformance());
         }
         //Cas 4
-        else if(objectifCa*1.05 < caTraite && caTraite <= objectifCa*1.2){
+        else if(caTraite <= objectifCa*1.2){
             performance = employe.getPerformance() + 1;
         }
         //Cas 5
-        else if(objectifCa*1.2 < caTraite){
+        else {
             performance = employe.getPerformance() + 4;
         }
-        //Si autre cas, on reste à la performance de base.
 
         //Calcul de la performance moyenne
         Double performanceMoyenne = employeRepository.avgPerformanceWhereMatriculeStartsWith("C");
