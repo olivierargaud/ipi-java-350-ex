@@ -159,6 +159,11 @@ public class Employe {
         return prime * this.tempsPartiel;
     }
 
+    /**
+     * Méthode permettant d'augmenter le salaire d'un employé en fonction d'un pourcentage
+     * @param pourcentage   pourcentage d'augmentation ex:0.1 pour 10%
+     * @throws IllegalArgumentException
+     */
     //Augmenter salaire
     public void augmenterSalaire(Double pourcentage) throws IllegalArgumentException {
         if (pourcentage == null) {
