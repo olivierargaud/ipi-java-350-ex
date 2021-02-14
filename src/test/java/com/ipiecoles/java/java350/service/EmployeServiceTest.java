@@ -138,23 +138,39 @@ class EmployeServiceTest {
 
     }
 
-    @ParameterizedTest(name = "matricule {0}, caTraite {1}, objectifCa {2}, performancePrecedente{3}, performanceMoyenne{4}, performanceObtenue{5}")
+    @ParameterizedTest(name = "matricule {0}, caTraite {1}, objectifCa {2}, performanceMoyenne {3}, performancePrecedente {4}, performanceObtenue {5}")
     @CsvSource
             ({
                     // performance en dessous de la moyenne
-                    "'C12345',799,1000,1,6,1", // caTraite < -20% objectif
-                    "'C12345',800,1000,0,6,1", // -20% objectif <= caTraite < -5% objectif
-                    "'C12345',800,1000,4,6,2", // -20% objectif <= caTraite < -5% objectif
-                    "'C12345',1000,1000,0,6,1", // -5% objectif <= caTraite <= +5% objectif
-                    "'C12345',1000,1000,4,6,4", // -5% objectif <= caTraite <= +5% objectif
-                    "'C12345',1200,1000,0,6,1", // +5% objectif < caTraite <= +20% objectif
-                    "'C12345',1200,1000,4,6,5", // +5% objectif < caTraite <= +20% objectif
-                    "'C12345',1201,1000,1,6,5", // +20% objectif < caTraite
+                    "'C12345',799,1000,10,1,1", // caTraite < -20% objectif
+
+                    "'C12345',800,1000,10,0,1", // -20% objectif <= caTraite < -5% objectif
+                    "'C12345',800,1000,10,4,2", // -20% objectif <= caTraite < -5% objectif
+                    "'C12345',801,1000,10,4,2", // -20% objectif <= caTraite < -5% objectif
+
+                    "'C12345',950,1000,10,4,4", // -5% objectif <= caTraite <= +5% objectif
+                    "'C12345',1049,1000,10,6,6", // -5% objectif <= caTraite <= +5% objectif
+                    "'C12345',1050,1000,10,7,7", // -5% objectif <= caTraite <= +5% objectif
+
+                    "'C12345',1051,1000,10,4,5", // +5% objectif < caTraite <= +20% objectif
+                    "'C12345',1199,1000,10,4,5", // +5% objectif < caTraite <= +20% objectif
+                    "'C12345',1200,1000,10,4,5", // +5% objectif < caTraite <= +20% objectif
+
+                    "'C12345',1201,1000,10,1,5", // +20% objectif < caTraite
+
+                    // performance égale a la moyenne
+                    "'C12345',1201,1000,8,4,8",  // +20% objectif < caTraite
 
                     // performance au dessus de la moyenne
-                    "'C12345',1201,1000,4,6,9", // -5% objectif <= caTraite <= +5% objectif
+                    "'C12345',1201,1000,2,4,9",  // +20% objectif < caTraite
+
+                    // test caTraite a zero
+                    "'C12345',0,1000,10,4,1", //
+                    // test objectifCa a zero
+                    "'C12345',1000,0,10,2,6", //
+
             })
-    void testCalculPerformanceCommercial(String matricule, Long caTraite, Long objectifCa, Integer performancePrecedente, Double performanceMoyenne, Integer performanceObtenue) throws EmployeException {
+    void testCalculPerformanceCommercial(String matricule, Long caTraite, Long objectifCa, Double performanceMoyenne, Integer performancePrecedente, Integer performanceObtenue) throws EmployeException {
         //Given
         Employe employe = new Employe("Doe", "Jane", matricule, LocalDate.now(), 1500d, performancePrecedente, 1.0);
 
@@ -174,9 +190,9 @@ class EmployeServiceTest {
             ({
 
                     "'C12345',,1000,Le chiffre d'affaire traité ne peut être négatif ou null !",
-                    "'C12345',-1000,1000,Le chiffre d'affaire traité ne peut être négatif ou null !",
+                    "'C12345',-500,1000,Le chiffre d'affaire traité ne peut être négatif ou null !",
                     "'C12345',1000,,L'objectif de chiffre d'affaire ne peut être négatif ou null !",
-                    "'C12345',1000,-1000,L'objectif de chiffre d'affaire ne peut être négatif ou null !",
+                    "'C12345',1000,-500,L'objectif de chiffre d'affaire ne peut être négatif ou null !",
                     ",1000,1000,Le matricule ne peut être null et doit commencer par un C !",
                     "'T12345',1000,1000,Le matricule ne peut être null et doit commencer par un C !"
 
