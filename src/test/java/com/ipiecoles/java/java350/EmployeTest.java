@@ -160,7 +160,7 @@ class EmployeTest {
 
 
     @Test
-    void TestAugmenterSalaireCasNominal() throws Exception {
+    void TestAugmenterSalaireCasNominal() {
         //Given
         Double pourcentage = 0.1;
         Employe employe = new Employe("Doe", "John", "T12345",
@@ -171,6 +171,21 @@ class EmployeTest {
 
         //Then
         Assertions.assertThat(employe.getSalaire()).isEqualTo(2200);
+
+    }
+
+    @Test
+    void TestAugmenterSalaireDeZeroPoucent() {
+        //Given
+        Double pourcentage = 0.0;
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 2000d, 1, 1.0);
+
+        //When
+        employe.augmenterSalaire(pourcentage);
+
+        //Then
+        Assertions.assertThat(employe.getSalaire()).isEqualTo(2000);
 
     }
 
