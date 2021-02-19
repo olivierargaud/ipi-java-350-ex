@@ -170,8 +170,10 @@ public class Employe {
             throw new IllegalArgumentException("L'augmentation de salaire ne peut avoir un pourcentage null");
         } else if (pourcentage < 0) {
             throw new IllegalArgumentException("L'augmentation de salaire ne peut avoir un pourcentage négatif");
+        } else if (getSalaire()==null) {
+            throw new IllegalArgumentException("Le salaire actuel est null");
         } else {
-            setSalaire(getSalaire() * (1 + pourcentage));
+            setSalaire(Math.ceil(getSalaire() * (1 + pourcentage) * 100)/100);
         }
     }
 

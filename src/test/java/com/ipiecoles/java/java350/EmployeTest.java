@@ -175,6 +175,21 @@ class EmployeTest {
     }
 
     @Test
+    void TestAugmenterSalaireAvecArrondi() {
+        //Given
+        Double pourcentage = 1/30d;
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), 2000d, 1, 1.0);
+
+        //When
+        employe.augmenterSalaire(pourcentage);
+
+        //Then
+        Assertions.assertThat(employe.getSalaire()).isEqualTo(2066.67);
+
+    }
+
+    @Test
     void TestAugmenterSalaireDeZeroPoucent() {
         //Given
         Double pourcentage = 0.0;
@@ -229,5 +244,24 @@ class EmployeTest {
 
     }
 
+    @Test
+    void TestAugmenterSalaireSalaireNull() {
+        //Given
+        Double pourcentage = 0.1;
+        Employe employe = new Employe("Doe", "John", "T12345",
+                LocalDate.now(), null, 1, 1.0);
+
+        //When
+        try {
+            employe.augmenterSalaire(pourcentage);
+            Assertions.fail("augmenterSalaire aurait du lancer une exception");
+        }catch (Exception e)
+        {
+            Assertions.assertThat(e).isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le salaire actuel est null");
+            Assertions.assertThat(employe.getSalaire()).isEqualTo(null);
+        }
+
+    }
 
 }
