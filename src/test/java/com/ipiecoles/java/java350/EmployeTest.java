@@ -259,7 +259,7 @@ class EmployeTest {
         {
             Assertions.assertThat(e).isInstanceOf(IllegalArgumentException.class);
             Assertions.assertThat(e.getMessage()).isEqualTo("Le salaire actuel est null");
-            Assertions.assertThat(employe.getSalaire()).isEqualTo(null);
+            Assertions.assertThat(employe.getSalaire()).isNull();
         }
 
     }
