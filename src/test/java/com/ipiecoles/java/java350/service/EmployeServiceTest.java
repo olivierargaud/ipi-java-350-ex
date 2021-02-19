@@ -33,10 +33,6 @@ class EmployeServiceTest {
         Poste poste = Poste.TECHNICIEN;
         NiveauEtude niveauEtude = NiveauEtude.BTS_IUT;
         Double tempsPartiel = 1.0;
-        // Simuler qu'aucun employé n'est present
-        Mockito.when(employeRepository.findLastMatricule()).thenReturn(null);
-        // la on connait le matricule car c'est le premier employe et que c'est un technicien donc T00001
-        Mockito.when(employeRepository.findByMatricule("T00001")).thenReturn(null);
 
         Mockito.when(employeRepository.save(Mockito.any(Employe.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
@@ -66,9 +62,7 @@ class EmployeServiceTest {
         Poste poste = Poste.TECHNICIEN;
         NiveauEtude niveauEtude = NiveauEtude.BTS_IUT;
         Double tempsPartiel = 0.5;
-        // Simuler qu'aucun employé n'est present
-        Mockito.when(employeRepository.findLastMatricule()).thenReturn(null);
-        Mockito.when(employeRepository.findByMatricule("T00001")).thenReturn(null);
+
         Mockito.when(employeRepository.save(Mockito.any(Employe.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         //When
@@ -174,7 +168,6 @@ class EmployeServiceTest {
 
         Mockito.when(employeRepository.findByMatricule(Mockito.anyString())).thenReturn(employe);
         Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(performanceMoyenne);
-        Mockito.when(employeRepository.save(employe)).thenReturn(null);
         //When
         employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
 
@@ -215,7 +208,6 @@ class EmployeServiceTest {
         String matricule = "C12345";
         Long caTraite = 1000L;
         Long objectifCa = 1000L;
-        Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(null);
         //When
         try {
             employeService.testParametreCalculPerformanceValide(matricule, caTraite, objectifCa);
