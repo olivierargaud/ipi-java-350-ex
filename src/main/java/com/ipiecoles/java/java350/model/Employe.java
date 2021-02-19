@@ -69,28 +69,59 @@ public class Employe {
     }
 
     /**
+     * Méthode permettant de calculer le nombre de jour de RTT dans l'année (au pro-rata du taux d'activité de l'employé)
+     * selon la formule :
+     * Nb jours RTT =
+     * Nombre de jours dans l'année
+     * - Nombre de jours travaillés dans l'année en plein temps
+     * - Nombre de samedi et dimanche dans l'année
+     * - Nombre de jours fériés ne tombant pas le week-end
+     * - Nombre de congés payés
      *
-     * @param d
-     * @return
+     * @param dateReference la date à laquelle on va calculer le nombre de RTT pour l'année
+     * @return Nombre de jours de RTT pour l'employé l'année de la date de référence
+     * au prorata du temps d'activité
      */
-    public Integer getNbRtt(LocalDate d) {
-        int i1 = d.isLeapYear() ? 365 : 366;
-        int var = 104;
-        switch (LocalDate.of(d.getYear(), 1, 1).getDayOfWeek()) {
+    public Integer getNbRtt(LocalDate dateReference) {
+
+        int nbJoursAnnee = dateReference.isLeapYear() ? 366 : 365;
+
+        //décompte du nombre de samedi dimanche de l'année en fonction du premier jour de l'année
+        //seuls les jeudis, vendredis et samedis ont un impact sur ce total
+        int nbSamediDimanche = 104;
+        switch (LocalDate.of(dateReference.getYear(), 1, 1).getDayOfWeek()) {
             case THURSDAY:
-                if (d.isLeapYear()) var = var + 1;
+                if (dateReference.isLeapYear()) {
+                    nbSamediDimanche = nbSamediDimanche + 1;
+                }
                 break;
             case FRIDAY:
-                if (d.isLeapYear()) var = var + 2;
-                else var = var + 1;
+                if (dateReference.isLeapYear()) {
+                    nbSamediDimanche = nbSamediDimanche + 2;
+                }
+                else {
+                    nbSamediDimanche = nbSamediDimanche + 1;
+                }
                 break;
             case SATURDAY:
-                var = var + 1;
+                nbSamediDimanche = nbSamediDimanche + 1;
+                break;
+            default:
                 break;
         }
-        int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate ->
+
+        // décompte du nombre de jours fériés nbJoursFeriesSemaine
+        // tombant dans la semaine dans la liste des jours fériés à une date donnée
+        int nbJoursFeriesSemaine = (int) Entreprise.joursFeries(dateReference).stream().filter(localDate ->
                 localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
-        return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
+
+        return (int) Math.ceil((
+                nbJoursAnnee
+                        - Entreprise.NB_JOURS_MAX_FORFAIT
+                        - nbSamediDimanche
+                        - Entreprise.NB_CONGES_BASE
+                        - nbJoursFeriesSemaine
+        ) * tempsPartiel);
     }
 
     /**
@@ -128,8 +159,23 @@ public class Employe {
         return prime * this.tempsPartiel;
     }
 
+    /**
+     * Méthode permettant d'augmenter le salaire d'un employé en fonction d'un pourcentage
+     * @param pourcentage   pourcentage d'augmentation ex:0.1 pour 10%
+     * @throws IllegalArgumentException
+     */
     //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    public void augmenterSalaire(Double pourcentage) throws IllegalArgumentException {
+        if (pourcentage == null) {
+            throw new IllegalArgumentException("L'augmentation de salaire ne peut avoir un pourcentage null");
+        } else if (pourcentage < 0) {
+            throw new IllegalArgumentException("L'augmentation de salaire ne peut avoir un pourcentage négatif");
+        } else if (getSalaire()==null) {
+            throw new IllegalArgumentException("Le salaire actuel est null");
+        } else {
+            setSalaire(Math.ceil(getSalaire() * (1 + pourcentage) * 100)/100);
+        }
+    }
 
     public Long getId() {
         return id;
